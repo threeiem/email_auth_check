@@ -33,13 +33,13 @@ This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identifie
 Ensure your virtual environment is activated, then run the script from the command line, providing a domain as an argument:
 
 ```
-python email_auth_checker.py example.com
+python email_auth_check.py example.com
 ```
 
 To specify a DKIM selector (default is 'default'):
 
 ```
-python email_auth_checker.py example.com -s selector1
+python email_auth_check.py example.com -s selector1
 ```
 
 Replace `example.com` with the domain you want to check, and `selector1` with the DKIM selector you want to use.
