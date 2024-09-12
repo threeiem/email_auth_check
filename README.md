@@ -1,6 +1,6 @@
 # Email Authentication Checker
 
-This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identified Mail), and DMARC (Domain-based Message Authentication, Reporting, and Conformance) records for a given domain.
+This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identified Mail), and DMARC (Domain-based Message Authentication, Reporting, and Conformance) records for a given domain. It also provides safety warnings for potentially unsafe configurations.
 
 ## Installation
 
@@ -44,6 +44,8 @@ python email_auth_checker.py example.com -s selector1
 
 Replace `example.com` with the domain you want to check, and `selector1` with the DKIM selector you want to use.
 
+The script will provide warnings for potentially unsafe configurations.
+
 To deactivate the virtual environment when you're done, simply run:
 
 ```
@@ -53,4 +55,3 @@ deactivate
 ## License
 
 This project is open source and available under the [MIT License](https://opensource.org/licenses/MIT).
-
