@@ -6,28 +6,51 @@ This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identifie
 
 1. Ensure you have Python 3.6 or higher installed.
 2. Clone this repository or download the files.
-3. Install the required dependencies:
-
+3. Navigate to the project directory:
+   ```
+   cd email_auth_checker
+   ```
+4. Create a virtual environment:
+   ```
+   python -m venv venv
+   ```
+5. Activate the virtual environment:
+   - On Windows:
+     ```
+     venv\Scripts\activate
+     ```
+   - On macOS and Linux:
+     ```
+     source venv/bin/activate
+     ```
+6. Install the required dependencies:
    ```
    pip install -r requirements.txt
    ```
 
 ## Usage
 
-Run the script from the command line, providing a domain as an argument:
+Ensure your virtual environment is activated, then run the script from the command line, providing a domain as an argument:
 
 ```
-python email_auth_checker.py pantheon.io
+python email_auth_checker.py example.com
 ```
 
 To specify a DKIM selector (default is 'default'):
 
 ```
-python email_auth_checker.py pantheon.io -s selector1
+python email_auth_checker.py example.com -s selector1
 ```
 
-Replace `pantheon.io` with the domain you want to check, and `selector1` with the DKIM selector you want to use.
+Replace `example.com` with the domain you want to check, and `selector1` with the DKIM selector you want to use.
+
+To deactivate the virtual environment when you're done, simply run:
+
+```
+deactivate
+```
 
 ## License
 
 This project is open source and available under the [MIT License](https://opensource.org/licenses/MIT).
+
