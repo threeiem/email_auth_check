@@ -1,6 +1,6 @@
 # Email Authentication Checker
 
-This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identified Mail), and DMARC (Domain-based Message Authentication, Reporting, and Conformance) records for a given domain. It also provides safety warnings for potentially unsafe configurations.
+This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identified Mail), and DMARC (Domain-based Message Authentication, Reporting, and Conformance) records for a given domain. It provides color-coded safety warnings for potentially unsafe configurations and supports output to pipes and files.
 
 ## Installation
 
@@ -10,46 +10,48 @@ This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identifie
    ```
    cd email_auth_checker
    ```
-4. Create a virtual environment:
+4. (Optional but recommended) Create and activate a virtual environment:
    ```
-   python -m venv venv
+   python3 -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
    ```
-5. Activate the virtual environment:
-   - On Windows:
-     ```
-     venv\Scripts\activate
-     ```
-   - On macOS and Linux:
-     ```
-     source venv/bin/activate
-     ```
-6. Install the required dependencies:
+5. Install the required dependencies:
    ```
    pip install -r requirements.txt
    ```
 
 ## Usage
 
-Ensure your virtual environment is activated, then run the script from the command line, providing a domain as an argument:
+Ensure you're in the project directory and your virtual environment is activated (if you're using one), then run the script:
 
 ```
-python email_auth_check.py example.com
+python email_auth_checker.py pantheon.io
 ```
 
 To specify a DKIM selector (default is 'default'):
 
 ```
-python email_auth_check.py example.com -s selector1
+python email_auth_checker.py pantheon.io -s selector1
 ```
 
-Replace `example.com` with the domain you want to check, and `selector1` with the DKIM selector you want to use.
-
-The script will provide warnings for potentially unsafe configurations.
-
-To deactivate the virtual environment when you're done, simply run:
+To disable colored output:
 
 ```
-deactivate
+python email_auth_checker.py pantheon.io --no-color
+```
+
+Replace `pantheon.io` with the domain you want to check, and `selector1` with the DKIM selector you want to use.
+
+## Troubleshooting
+
+If you encounter import errors, ensure that:
+1. You're running the script from the project's root directory.
+2. All dependencies are installed (`pip install -r requirements.txt`).
+3. Your virtual environment is activated (if you're using one).
+
+If issues persist, try:
+```
+PYTHONPATH=. python email_auth_checker.py pantheon.io
 ```
 
 ## License
