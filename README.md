@@ -25,22 +25,28 @@ This script checks the SPF (Sender Policy Framework), DKIM (DomainKeys Identifie
 Ensure you're in the project directory and your virtual environment is activated (if you're using one), then run the script:
 
 ```
-python email_auth_checker.py pantheon.io
+python email_auth_check.py pantheon.io
 ```
 
-To specify a DKIM selector (default is 'default'):
+To check DKIM (requires knowing the selector):
 
 ```
-python email_auth_checker.py pantheon.io -s selector1
+python email_auth_check.py pantheon.io -s selector1
 ```
 
 To disable colored output:
 
 ```
-python email_auth_checker.py pantheon.io --no-color
+python email_auth_check.py pantheon.io --no-color
 ```
 
-Replace `pantheon.io` with the domain you want to check, and `selector1` with the DKIM selector you want to use.
+Replace `pantheon.io` with the domain you want to check, and `selector1` with the DKIM selector you want to use (if known).
+
+## Features
+
+- Checks SPF, DKIM (with provided selector), and DMARC records
+- Provides color-coded output for easy reading
+- Offers detailed analysis of each record type
 
 ## Troubleshooting
 
@@ -51,7 +57,7 @@ If you encounter import errors, ensure that:
 
 If issues persist, try:
 ```
-PYTHONPATH=. python email_auth_checker.py pantheon.io
+PYTHONPATH=. python email_auth_check.py pantheon.io
 ```
 
 ## License
