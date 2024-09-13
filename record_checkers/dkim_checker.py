@@ -1,20 +1,16 @@
-from .base_checker import RecordChecker
+"""
+DKIM Checker: Class to check the DKIM record for a domain.
+"""
 from output import info, warn, error
+from .base_checker import RecordChecker
 
 class DKIMChecker(RecordChecker):
     """
-    Checker for DKIM (DomainKeys Identified Mail) records.
+    Class to check the DKIM record for a domain.
     """
     record_type = "DKIM"
 
     def __init__(self, domain, selector):
-        """
-        Initialize the DKIM checker.
-
-        Args:
-        domain (str): The domain to check.
-        selector (str): The DKIM selector to use.
-        """
         super().__init__(domain)
         self.selector = selector
 
@@ -30,9 +26,9 @@ class DKIMChecker(RecordChecker):
 
         for rdata in answers:
             for txt_string in rdata.strings:
-                if txt_string.startswith(b'v=DKIM1'):
-                    dkim_record = txt_string.decode('utf-8')
-                    info(f"DKIM record found: {dkim_record}")
+                if txt_string.startswith(b"v=DKIM1"):
+                    dkim_record = txt_string.decode("utf-8")
+                    info(dkim_record, bold_prefix="DKIM Record:")
                     self.analyze_dkim(dkim_record)
                     return
 
@@ -41,12 +37,6 @@ class DKIMChecker(RecordChecker):
     def analyze_dkim(self, dkim_record):
         """
         Analyze the DKIM record for potential issues.
-
-        Args:
-        dkim_record (str): The DKIM record to analyze.
         """
-        # Implement DKIM-specific checks here
-        # Example:
-        if 'k=rsa;' not in dkim_record:
+        if "k=rsa;" not in dkim_record:
             warn("DKIM record doesn't specify RSA as the key type.")
-

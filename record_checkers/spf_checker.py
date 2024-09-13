@@ -14,14 +14,14 @@ class SPFChecker(RecordChecker):
         """
         answers = self.resolve_txt_record(self.domain)
         if not answers:
-            error("No SPF record found. This may allow email spoofing.")
+            error("SPF record not found (allows email spoofing)")
             return
 
         for rdata in answers:
             for txt_string in rdata.strings:
                 if txt_string.startswith(b'v=spf1'):
                     spf_record = txt_string.decode('utf-8')
-                    info(f"SPF record found: {spf_record}")
+                    info(f"{spf_record}", bold_prefix="SPF Record:")
                     self.analyze_spf(spf_record)
                     return
 
@@ -35,14 +35,14 @@ class SPFChecker(RecordChecker):
         spf_record (str): The SPF record to analyze.
         """
         rules = [
-            (lambda r: ' +all' in r, "SPF record uses '+all', which allows all senders and is extremely permissive.", error),
-            (lambda r: ' ?all' in r, "SPF record uses '?all', which is neutral and doesn't provide protection.", warn),
-            (lambda r: ' ~all' not in r and ' -all' not in r, "SPF record doesn't end with '~all' or '-all', which may allow unauthorized senders.", warn),
-            (lambda r: 'ip4:0.0.0.0/0' in r or 'ip6:::0/0' in r, "SPF record allows all IP addresses, which is extremely permissive.", error),
-            (lambda r: len(re.findall(r'\s([+-?~]?(?:ip4|ip6|a|mx|ptr|exists|include)(?::[^\s]+)?)', r)) > 10, "SPF record has more than 10 mechanisms, which may cause lookup limits.", warn),
-            (lambda r: 'ptr' in r, "SPF record uses 'ptr' mechanism, which is inefficient and not recommended.", warn),
-            (lambda r: '_spf.smart.ondmarc.com' in r, "SPF record includes a reference to '_spf.smart.ondmarc.com'. This may indicate a third-party SPF management service, which could introduce unexpected behavior or dependencies.", warn),
-            (lambda r: re.search(r'include:[^.\s]+\.[^.\s]+\.[^.\s]+\._spf\.', r), "SPF record contains an unusual 'include' structure with multiple subdomains. This could lead to unexpected behavior or resolution issues.", warn)
+            (lambda r: 'ip4:0.0.0.0/0' in r or 'ip6:::0/0' in r, "SPF record allows all IP addresses (extremely permissive)", error),
+            (lambda r: ' +all' in r, "'+all', SPF record allows all senders (extremely permissive)", error),
+            (lambda r: ' ?all' in r, "'?all', SPF record is neutral (no provide protection)", warn),
+            (lambda r: ' ~all' not in r and ' -all' not in r, "SPF record is missing closing '~all' or '-all' (allows unauthorized senders)", warn),
+            (lambda r: len(re.findall(r'\s([+-?~]?(?:ip4|ip6|a|mx|ptr|exists|include)(?::[^\s]+)?)', r)) > 10, "SPF record has over 10 mechanisms (lookups limited)", warn),
+            (lambda r: 'ptr' in r, "SPF record uses 'ptr' mechanism (inefficient/not recommended)", warn),
+            (lambda r: '_spf.smart.ondmarc.com' in r, "SPF record references '_spf.smart.ondmarc.com' (third-party SPF management detected)", warn),
+            (lambda r: re.search(r'include:[^.\s]+\.[^.\s]+\.[^.\s]+\._spf\.', r), "SPF record has an unusual 'include' for multiple subdomains (unexpected/resolution issues)", warn)
         ]
 
         for rule, message, level in rules:

@@ -1,9 +1,12 @@
-from .base_checker import RecordChecker
+"""
+Module to check the DMARC record for a domain.
+"""
 from output import info, warn, error
+from .base_checker import RecordChecker
 
 class DMARCChecker(RecordChecker):
     """
-    Checker for DMARC (Domain-based Message Authentication, Reporting, and Conformance) records.
+    Class to check the DMARC record for a domain.
     """
     record_type = "DMARC"
 
@@ -21,7 +24,7 @@ class DMARCChecker(RecordChecker):
             for txt_string in rdata.strings:
                 if txt_string.startswith(b'v=DMARC1'):
                     dmarc_record = txt_string.decode('utf-8')
-                    info(f"DMARC record found: {dmarc_record}")
+                    info(dmarc_record, bold_prefix="DMARC Record:")
                     self.analyze_dmarc(dmarc_record)
                     return
 
@@ -30,12 +33,6 @@ class DMARCChecker(RecordChecker):
     def analyze_dmarc(self, dmarc_record):
         """
         Analyze the DMARC record for potential issues.
-
-        Args:
-        dmarc_record (str): The DMARC record to analyze.
         """
-        # Implement DMARC-specific checks here
-        # Example:
         if 'p=none' in dmarc_record:
-            warn("DMARC policy is set to 'none', which only monitors and doesn't protect against spoofing.")
-
+            warn("DMARC policy is set to 'none', no protection against spoofing.")
